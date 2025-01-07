@@ -1,59 +1,48 @@
 import React from "react";
+import styled from "styled-components";
 
-function useTodoList() {
-  const [items, setItems] = React.useState<Array<string>>([]);
+import Button from "./components/Button";
+import TaskList, { useTaskList } from "./components/TaskList";
 
-  return [
-    items,
-    (label: string) => setItems((previousItems) => previousItems.concat(label)),
-    (label: string) =>
-      setItems((previousItems) =>
-        previousItems.filter((item) => item !== label)
-      ),
-  ] as const;
-}
+const Container = styled.div`
+  padding: 2.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5em;
+`;
 
-function ItemsList(props: {
-  items: Array<string>;
-  onMoveBack?: (item: string) => void;
-  onMoveForward?: (item: string) => void;
-}) {
-  return (
-    <ul>
-      {props.items.map((item) => (
-        <div key={item} style={{ display: "flex", flexDirection: "row" }}>
-          <button
-            disabled={!props.onMoveBack}
-            onClick={() => props.onMoveBack?.(item)}
-          >
-            ←
-          </button>
+const LanesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2.5em;
+  align-items: stretch;
+  min-height: 50vh;
+`;
 
-          <li>{item}</li>
+const Form = styled.form`
+  display: flex;
+  gap: 2em;
+`;
 
-          <button
-            disabled={!props.onMoveForward}
-            onClick={() => props.onMoveForward?.(item)}
-          >
-            →
-          </button>
-        </div>
-      ))}
-    </ul>
-  );
-}
+const Input = styled.input`
+  padding-inline: 1em;
+  font-size: 1.5rem;
+  padding-block: 0.5em;
+`;
 
 export function ChallengeComponent() {
   const [newItem, setNewItem] = React.useState("");
 
-  const [todoItems, addTodo, removeTodo] = useTodoList();
-  const [ongoingItems, addOngoing, removeOngoing] = useTodoList();
-  const [doneItems, addDone, removeDone] = useTodoList();
+  const [todoItems, addTodo, removeTodo] = useTaskList();
+  const [ongoingItems, addOngoing, removeOngoing] = useTaskList();
+  const [doneItems, addDone, removeDone] = useTaskList();
 
   return (
-    <div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <ItemsList
+    <Container>
+      <LanesContainer>
+        <TaskList
+          title="To Do"
           items={todoItems}
           onMoveForward={(item) => {
             removeTodo(item);
@@ -61,7 +50,8 @@ export function ChallengeComponent() {
           }}
         />
 
-        <ItemsList
+        <TaskList
+          title="In Progress"
           items={ongoingItems}
           onMoveBack={(item) => {
             addTodo(item);
@@ -73,25 +63,31 @@ export function ChallengeComponent() {
           }}
         />
 
-        <ItemsList
+        <TaskList
+          title="Done"
           items={doneItems}
           onMoveBack={(item) => {
             addOngoing(item);
             removeDone(item);
           }}
         />
-      </div>
+      </LanesContainer>
 
-      <form
+      <Form
         onSubmit={(e) => {
           e.preventDefault();
           addTodo(newItem);
           setNewItem("");
         }}
       >
-        <input value={newItem} onChange={(e) => setNewItem(e.target.value)} />
-        <button type="submit">+</button>
-      </form>
-    </div>
+        <Input
+          placeholder="Add Task"
+          value={newItem}
+          onChange={(e) => setNewItem(e.target.value)}
+          required
+        />
+        <Button>+</Button>
+      </Form>
+    </Container>
   );
 }
