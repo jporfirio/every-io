@@ -33,50 +33,35 @@ const Input = styled.input`
 
 export function ChallengeComponent() {
   const [newItem, setNewItem] = React.useState("");
-
-  const [todoItems, addTodo, removeTodo] = useTaskList();
-  const [ongoingItems, addOngoing, removeOngoing] = useTaskList();
-  const [doneItems, addDone, removeDone] = useTaskList();
+  const [state, dispatch] = useTaskList();
 
   return (
     <Container>
       <LanesContainer>
         <TaskList
           title="To Do"
-          items={todoItems}
-          onMoveForward={(item) => {
-            removeTodo(item);
-            addOngoing(item);
-          }}
+          items={state.todo}
+          onMoveForward={(item) => dispatch("TO_DOING", item)}
         />
 
         <TaskList
           title="In Progress"
-          items={ongoingItems}
-          onMoveBack={(item) => {
-            addTodo(item);
-            removeOngoing(item);
-          }}
-          onMoveForward={(item) => {
-            removeOngoing(item);
-            addDone(item);
-          }}
+          items={state.doing}
+          onMoveForward={(item) => dispatch("TO_DONE", item)}
+          onMoveBack={(item) => dispatch("FROM_DOING", item)}
         />
 
         <TaskList
           title="Done"
-          items={doneItems}
-          onMoveBack={(item) => {
-            addOngoing(item);
-            removeDone(item);
-          }}
+          items={state.done}
+          onMoveBack={(item) => dispatch("FROM_DONE", item)}
         />
       </LanesContainer>
 
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          addTodo(newItem);
+          dispatch("NEW_ITEM", newItem);
           setNewItem("");
         }}
       >

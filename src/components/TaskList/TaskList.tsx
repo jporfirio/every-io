@@ -63,7 +63,7 @@ export default function TaskList({
       <Title>{title}</Title>
 
       <Body>
-        {!items.length && <NoItems>No tasks on {title}</NoItems>}
+        {!items.length && <NoItems>No tasks {title}</NoItems>}
 
         {items.map((item) => (
           <Item key={item}>
