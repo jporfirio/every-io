@@ -30,3 +30,6 @@ This is a basic todo list, with the following functionality.
 1. npm install
 2. npm run start
 3. open your browser to http://localhost:3000
+
+### Deployment
+The deployed version was achieved with the [gh-pages](https://www.npmjs.com/package/gh-pages) package, which enables deploing React applications to the otherwise static/document Github Pages.
