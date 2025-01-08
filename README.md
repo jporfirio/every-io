@@ -33,3 +33,12 @@ This is a basic todo list, with the following functionality.
 
 ### Deployment
 The deployed version was achieved with the [gh-pages](https://www.npmjs.com/package/gh-pages) package, which enables deploing React applications to the otherwise static/document Github Pages.
+
+### Homepage
+Deployment to Github Pages was simpler if we switched the homepage of the project to `/every-io` instead of the common `/`.
+
+### Problems
+
+If you run into the error `error:0308010C:digital envelope routines::unsupported`, start the application with the command bellow instead, or run with Node v16.
+
+> NODE_OPTIONS=--openssl-legacy-provider yarn start
